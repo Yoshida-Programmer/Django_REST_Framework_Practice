@@ -1,11 +1,15 @@
+//requireでモジュール群をまとめたJSファイルを読み込む
 const BundleTracker = require("webpack-bundle-tracker");
 
+//モジュール定義
 module.exports = {
     publicPath: "http://127.0.0.1:8080/",
     outputDir: './dist/',
-
+    transpileDependencies: ["vuetify"],
+    
     chainWebpack: config => {
 
+        //「複数のエントリーポイント間で利用している共通モジュールをバンドルしたファイル」を出力するための設定のこと。
         config.optimization
             .splitChunks(false)
 
