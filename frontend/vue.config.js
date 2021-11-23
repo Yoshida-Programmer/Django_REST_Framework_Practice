@@ -3,30 +3,27 @@ const BundleTracker = require("webpack-bundle-tracker");
 
 //モジュール定義
 module.exports = {
-    publicPath: "http://127.0.0.1:8080/",
-    outputDir: './dist/',
-    transpileDependencies: ["vuetify"],
-    
-    chainWebpack: config => {
+  publicPath: "http://127.0.0.1:8080/",
+  outputDir: "./dist/",
+  transpileDependencies: ["vuetify"],
 
-        //「複数のエントリーポイント間で利用している共通モジュールをバンドルしたファイル」を出力するための設定のこと。
-        config.optimization
-            .splitChunks(false)
+  chainWebpack: (config) => {
+    //「複数のエントリーポイント間で利用している共通モジュールをバンドルしたファイル」を出力するための設定のこと。
+    config.optimization.splitChunks(false);
 
-        config
-            .plugin('BundleTracker')
-            .use(BundleTracker, [{filename: '../frontend/webpack-stats.json'}])
+    config.output.filename("bundle.js");
 
-        config.resolve.alias
-            .set('__STATIC__', 'static')
+    config
+      .plugin("BundleTracker")
+      .use(BundleTracker, [{ filename: "./webpack-stats.json" }]);
 
-        config.devServer
-            .public('http://0.0.0.0:8080')
-            .host('0.0.0.0')
-            .port(8080)
-            .hotOnly(true)
-            .watchOptions({poll: 1000})
-            .https(false)
-            .headers({"Access-Control-Allow-Origin": ["\*"]})
-            }
-        };
+    config.resolve.alias.set("__STATIC__", "static");
+
+    config.devServer
+      .hotOnly(true)
+      .watchOptions({ poll: 1000 })
+      .https(false)
+      .disableHostCheck(true)
+      .headers({ "Access-Control-Allow-Origin": ["*"] });
+  },
+};
