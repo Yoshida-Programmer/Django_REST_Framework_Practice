@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getJobs() {
-      let endpoint = 'api/jobs/'
+      let endpoint = '/api/jobs/'
       if (this.next) {
         endpoint = this.next;
       }

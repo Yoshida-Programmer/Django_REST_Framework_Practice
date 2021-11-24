@@ -63,6 +63,12 @@ import { apiService } from '../common/api.service.js'
 
 export default {
     name: 'JObEditor',
+    props: {
+        id: {
+            type: Number,
+            required: false
+        }
+    },
     data() {
         return {
             company_name: null,
@@ -79,6 +85,10 @@ export default {
         onSubmit() {
             let endpoint = '/api/jobs/';
             let method = 'POST';
+            if (this.id !== undefined) {
+                endpoint += `${this.id}/`;
+                method = 'PUT';
+            }
             apiService(endpoint, method, {
                 company_name: this.company_name,
                 company_email: this.company_email,
@@ -93,6 +103,23 @@ export default {
                     params: { id: job_data.id }
                 })
             })
+        }
+    },
+    async beforeRouteEnter(to, from, next) {
+        if (to.params.id !== undefined) {
+            let endpoint = `/api/jobs/${ to.params.id }/`;
+            let data = await apiService(endpoint);
+            return next(vm => {
+                (vm.company_name = data.company_name),
+                (vm.company_email = data.company_email),
+                (vm.job_title = data.job_title),
+                (vm.job_description = data.job_description),
+                (vm.salary = data.salary),
+                (vm.prefectures = data.prefectures),
+                (vm.city = data.city)
+            });
+        } else {
+            return next();
         }
     },
     created() {
