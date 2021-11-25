@@ -1,3 +1,5 @@
+<!--求人情報【詳細】-->
+
 <template>
   <div>
     <v-container>
